@@ -10,9 +10,10 @@ interface Result {
   average: number;
 }
 
-const CalculateExercises = (): Result => {
-  const dailyTarget = Number(process.argv[2]);
-  const hours = process.argv.slice(3).map(Number);
+export const CalculateExercises = (
+  dailyTarget: number,
+  hours: number[],
+): Result => {
   if (isNotNumber(dailyTarget)) {
     throw new Error("Daily target must be a number");
   }
@@ -56,4 +57,9 @@ const CalculateExercises = (): Result => {
   };
 };
 
-console.log(CalculateExercises());
+if (process.argv[1] === import.meta.filename) {
+  const dailyTarget = Number(process.argv[2]);
+  const hours = process.argv.slice(3).map(Number);
+
+  console.log(CalculateExercises(dailyTarget, hours));
+}
