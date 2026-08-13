@@ -1,15 +1,13 @@
-import { isNotNumber } from "./utils/isNotNumber";
+import { isNotNumber } from "./utils/isNotNumber.ts";
 
-const bmiCalculator = (): string => {
-  const height = process.argv[2];
-  const weight = process.argv[3];
+const bmiCalculator = (height: number, weight: number): string => {
   if (isNotNumber(height) || isNotNumber(weight)) {
     return "Invalid input values";
   }
 
-  const heightInM = Number(height) / 100;
+  const heightInM = height / 100;
 
-  const bmi = Number(weight) / (heightInM * heightInM);
+  const bmi = weight / (heightInM * heightInM);
 
   switch (true) {
     case bmi < 16:
@@ -33,4 +31,10 @@ const bmiCalculator = (): string => {
   }
 };
 
-console.log(bmiCalculator());
+if (process.argv[1] === import.meta.filename) {
+  const height = Number(process.argv[2]);
+  const weight = Number(process.argv[3]);
+  console.log(bmiCalculator(height, weight));
+}
+
+export { bmiCalculator };

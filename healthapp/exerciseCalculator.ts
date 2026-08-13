@@ -1,4 +1,4 @@
-import { isNotNumber } from "./utils/isNotNumber";
+import { isNotNumber } from "./utils/isNotNumber.ts";
 
 interface Result {
   periodLength: number;
@@ -10,7 +10,7 @@ interface Result {
   average: number;
 }
 
-const CalculateExercises = () => {
+const CalculateExercises = (): Result => {
   const dailyTarget = Number(process.argv[2]);
   const hours = process.argv.slice(3).map(Number);
   if (isNotNumber(dailyTarget)) {
