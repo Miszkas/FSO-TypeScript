@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils/isNotNumber";
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -8,9 +10,14 @@ interface Result {
   average: number;
 }
 
-const CalculateExercises = (hours: number[], dailyTarget: number) => {
+const CalculateExercises = () => {
+  const dailyTarget = Number(process.argv[2]);
+  const hours = process.argv.slice(3).map(Number);
+  if (isNotNumber(dailyTarget)) {
+    throw new Error("Daily target must be a number");
+  }
   for (const hour of hours) {
-    if (hour < 0) {
+    if (hour < 0 || isNotNumber(hour)) {
       throw new Error("Hours cannot be negative");
     }
   }
@@ -49,4 +56,4 @@ const CalculateExercises = (hours: number[], dailyTarget: number) => {
   };
 };
 
-console.log(CalculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+console.log(CalculateExercises());

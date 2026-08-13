@@ -1,7 +1,15 @@
-const bmiCalculator = (height: number, weight: number): string => {
-  const heightInM = height / 100;
+import { isNotNumber } from "./utils/isNotNumber";
 
-  const bmi = weight / (heightInM * heightInM);
+const bmiCalculator = (): string => {
+  const height = process.argv[2];
+  const weight = process.argv[3];
+  if (isNotNumber(height) || isNotNumber(weight)) {
+    return "Invalid input values";
+  }
+
+  const heightInM = Number(height) / 100;
+
+  const bmi = Number(weight) / (heightInM * heightInM);
 
   switch (true) {
     case bmi < 16:
@@ -25,4 +33,4 @@ const bmiCalculator = (height: number, weight: number): string => {
   }
 };
 
-console.log(bmiCalculator(170, 65));
+console.log(bmiCalculator());
