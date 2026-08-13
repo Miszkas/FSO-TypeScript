@@ -27,28 +27,28 @@ app.get("/bmi", (req, res) => {
 });
 
 app.post("/exercises", (req, res) => {
-  const { dailyTarget, hours } = req.body as {
-    dailyTarget: unknown;
-    hours: unknown;
+  const { target, daily_exercises } = req.body as {
+    target: unknown;
+    daily_exercises: unknown;
   };
 
-  if (dailyTarget === undefined || hours === undefined) {
+  if (target === undefined || daily_exercises === undefined) {
     res.status(400).json({ error: "parameters missing" });
     return;
   } else if (
-    typeof dailyTarget !== "number" ||
-    !Array.isArray(hours) ||
-    !hours.every((h): h is number => typeof h === "number")
+    typeof target !== "number" ||
+    !Array.isArray(daily_exercises) ||
+    !daily_exercises.every((h): h is number => typeof h === "number")
   ) {
     res.status(400).json({ error: "malformatted parameters" });
     return;
   }
 
-  const result = CalculateExercises(dailyTarget, hours);
+  const result = CalculateExercises(target, daily_exercises);
   res.send(result);
 });
 
-const PORT = 3030;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

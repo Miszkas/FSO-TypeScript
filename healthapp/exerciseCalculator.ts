@@ -11,24 +11,26 @@ interface Result {
 }
 
 export const CalculateExercises = (
-  dailyTarget: number,
-  hours: number[],
+  target: number,
+  daily_exercises: number[],
 ): Result => {
-  if (isNotNumber(dailyTarget)) {
-    throw new Error("Daily target must be a number");
+  if (isNotNumber(target)) {
+    throw new Error("Target must be a number");
   }
-  for (const hour of hours) {
+  for (const hour of daily_exercises) {
     if (hour < 0 || isNotNumber(hour)) {
       throw new Error("Hours cannot be negative");
     }
   }
 
-  const average = hours.reduce((acc, curr) => acc + curr, 0) / hours.length;
+  const average =
+    daily_exercises.reduce((acc, curr) => acc + curr, 0) /
+    daily_exercises.length;
 
   const description = () => {
-    if (average >= dailyTarget) {
+    if (average >= target) {
       return "You're doing great, keep it up!";
-    } else if (average >= dailyTarget * 0.75) {
+    } else if (average >= target * 0.75) {
       return "You're mid as most of the people.";
     } else {
       return "You're lazy, don't even try again.";
@@ -36,9 +38,9 @@ export const CalculateExercises = (
   };
 
   const calculateRating = () => {
-    if (average >= dailyTarget) {
+    if (average >= target) {
       return 3;
-    } else if (average >= dailyTarget * 0.75) {
+    } else if (average >= target * 0.75) {
       return 2;
     } else {
       return 1;
@@ -46,20 +48,22 @@ export const CalculateExercises = (
   };
 
   return {
-    periodLength: hours.length,
-    trainingDays: hours.filter((hour) => hour > 0).length,
+    periodLength: daily_exercises.length,
+    trainingDays: daily_exercises.filter((hour) => hour > 0).length,
     success:
-      hours.reduce((acc, curr) => acc + curr, 0) / hours.length >= dailyTarget,
+      daily_exercises.reduce((acc, curr) => acc + curr, 0) /
+        daily_exercises.length >=
+      target,
     rating: calculateRating(),
     ratingDescription: description(),
-    target: dailyTarget,
+    target: target,
     average: average,
   };
 };
 
 if (process.argv[1] === import.meta.filename) {
-  const dailyTarget = Number(process.argv[2]);
-  const hours = process.argv.slice(3).map(Number);
+  const target = Number(process.argv[2]);
+  const daily_exercises = process.argv.slice(3).map(Number);
 
-  console.log(CalculateExercises(dailyTarget, hours));
+  console.log(CalculateExercises(target, daily_exercises));
 }
