@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "calculateBmi": "node bmiCalculator.ts"
+    "calculateBmi": "node bmiCalculator.ts",
+    "calculateExercises": "node exerciseCalculator.ts"
   },
   "devDependencies": {
     "typescript": "^7.0.2"
