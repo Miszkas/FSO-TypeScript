@@ -1,4 +1,7 @@
 import express from "express";
+import { diagnosesData } from "../data/diagnoses.ts";
+import { getPatientsWithoutSsn } from "../src/services/patientsService.ts";
+
 const app = express();
 
 app.use(express.json());
@@ -20,6 +23,14 @@ app.use(requestLogger);
 app.get("/api/ping", (_req, res) => {
   console.log("pinged");
   res.send("pong");
+});
+
+app.get("/api/diagnoses", (_req, res) => {
+  res.send(diagnosesData);
+});
+
+app.get("/api/patients", (_req, res) => {
+  res.send(getPatientsWithoutSsn());
 });
 
 const PORT = 3001;
