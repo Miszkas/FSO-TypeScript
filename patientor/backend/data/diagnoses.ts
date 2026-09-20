@@ -1,8 +1,4 @@
-export type Diagnoses = {
-  code: string;
-  name: string;
-  latin?: string;
-};
+import type { Diagnoses } from '../src/types.ts';
 
 export const diagnosesData: Diagnoses[] = [
   {
