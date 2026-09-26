@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import type { FlightSchema  } from './types'
 import flightService from './services/flighService'
+import axios from 'axios'
 
 const App = () => {
   const [flights, setFlights] = useState<FlightSchema[]>([])
@@ -10,29 +11,39 @@ const App = () => {
     date: '',
     comment: ''
   })
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
     flightService.getAll().then(flights => setFlights(flights))
   }, [])
 
-  const addFlight = (event: React.SyntheticEvent) => {
+  const addFlight = async (event: React.SyntheticEvent) => {
     event.preventDefault()
-    flightService.create(newFlight).then(returnedFlight => {
-      setFlights(flights.concat(returnedFlight))
-      
-    })
-    setNewFlight({
+    try {
+      const response = await flightService.create(newFlight)
+      setFlights(flights.concat(response))
+      setNewFlight({
         weather: '',
         visibility: '',
         date: '',
         comment: ''
       })
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.error[0])
+        setErrorMessage("Incorrect " + error.response?.data.error[0].path[0] + " input. " + error.response?.data.error[0].message)
+        setTimeout(() => setErrorMessage(null), 5000)
+      } else {
+        console.log('Unexpected error', error)
+      }
+    }
   }
 
   return (
     <>
       <h1>Flights</h1>
       <div> 
+        {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         <form onSubmit={addFlight}>
           <input value={newFlight.weather} onChange={(e) => setNewFlight({...newFlight, weather: e.target.value})} placeholder='Weather' />
           <input value={newFlight.visibility} onChange={(e) => setNewFlight({...newFlight, visibility: e.target.value})} placeholder='Visibility' />
