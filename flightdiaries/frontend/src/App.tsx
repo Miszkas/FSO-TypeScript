@@ -39,18 +39,44 @@ const App = () => {
     }
   }
 
+  const weatherOptions = ['sunny', 'rainy', 'cloudy', 'stormy', 'windy']
+  const visibilityOptions = ['great', 'good', 'ok', 'poor']
+
   return (
     <>
       <h1>Flights</h1>
       <div> 
-        {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
+        {errorMessage && <div style={{color: 'red', marginBottom: '5px'}}>{errorMessage}</div>}
         <form onSubmit={addFlight}>
-          <input value={newFlight.weather} onChange={(e) => setNewFlight({...newFlight, weather: e.target.value})} placeholder='Weather' />
-          <input value={newFlight.visibility} onChange={(e) => setNewFlight({...newFlight, visibility: e.target.value})} placeholder='Visibility' />
-          <input value={newFlight.date} onChange={(e) => setNewFlight({...newFlight, date: e.target.value})} placeholder='Date' />
-          <input value={newFlight.comment} onChange={(e) => setNewFlight({...newFlight, comment: e.target.value})} placeholder='Comment' />
+          <div>
+            <label>Date: {'  '}
+              <input type='date' value={newFlight.date} onChange={(e) => setNewFlight({...newFlight, date: e.target.value})} />
+            </label>
+          </div>
+          <div>
+            <span>Weather: </span>
+            {weatherOptions.map((option) => (
+              <label key={option} style={{marginLeft: '15px'}}>{option.charAt(0).toUpperCase() + option.slice(1)}
+                <input type='radio' value={option} name='weather' checked={newFlight.weather === option} onChange={(e) => setNewFlight({...newFlight, weather: e.target.value})}/>
+              </label>
+            ))}
+          </div>
+          <div>
+            <span>Visibility: </span>
+            {visibilityOptions.map((option) => (
+              <label key={option} style={{marginLeft: '15px'}}>{option.charAt(0).toUpperCase() + option.slice(1)}
+                <input type='radio' value={option} name='visibility' checked={newFlight.visibility === option} onChange={(e) => setNewFlight({...newFlight, visibility: e.target.value})}/>
+              </label>
+            ))}
+          </div>
+          <div>
+            <label>Comment: {'  '} 
+              <input value={newFlight.comment} onChange={(e) => setNewFlight({...newFlight, comment: e.target.value})} placeholder='Comment' />
+            </label>
+          </div>
           <button type='submit'>add</button>
         </form>
+        <h3>Flights</h3>
         <ul>
           {flights.map((flight) =>
             <li key={flight.id}>
