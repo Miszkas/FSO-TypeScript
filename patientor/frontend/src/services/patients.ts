@@ -20,9 +20,9 @@ const create = async (object: PatientFormValues) => {
   return data;
 };
 
-const getOne = async () => {
+const getOne = async (id: string) => {
   const { data } = await axios.get<Patient>(
-    `${apiBaseUrl}/patients/:id`
+    `${apiBaseUrl}/patients/${id}`
   );
 
   return data;
