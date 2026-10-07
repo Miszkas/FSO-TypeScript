@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export type Diagnoses = {
+export type Diagnosis = {
   code: string;
   name: string;
   latin?: string;
@@ -41,7 +41,7 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array<Diagnoses['code']>;
+  diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
 const HealthCheckRating = {

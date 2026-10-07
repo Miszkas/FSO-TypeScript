@@ -3,7 +3,7 @@ import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBo
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-import { PatientFormValues, Patient } from "../../types";
+import { PatientFormValues, NonSensitivePatient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
 
 import HealthRatingBar from "../HealthRatingBar";
@@ -11,8 +11,8 @@ import HealthRatingBar from "../HealthRatingBar";
 import patientService from "../../services/patients";
 
 interface Props {
-  patients : Patient[]
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
+  patients : NonSensitivePatient[]
+  setPatients: React.Dispatch<React.SetStateAction<NonSensitivePatient[]>>
 }
 
 const PatientListPage = ({ patients, setPatients } : Props ) => {
@@ -65,7 +65,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.values(patients).map((patient: Patient) => (
+          {Object.values(patients).map((patient: NonSensitivePatient) => (
             <TableRow key={patient.id}>
               <TableCell><Link to={`/patients/${patient.id}`}>{patient.name}</Link></TableCell>
               <TableCell>{patient.gender}</TableCell>
