@@ -1,6 +1,6 @@
-import type { Diagnoses } from '../src/types.ts';
+import type { Diagnosis } from "../src/types.ts";
 
-export const diagnosesData: Diagnoses[] = [
+export const diagnosesData: Diagnosis[] = [
   {
     code: "M24.2",
     name: "Disorder of ligament",
