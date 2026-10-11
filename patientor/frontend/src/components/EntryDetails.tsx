@@ -4,12 +4,7 @@ import GppGoodIcon from "@mui/icons-material/GppGood";
 import EmergencyIcon from "@mui/icons-material/Emergency";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import HealthRatingBar from "./HealthRatingBar";
-
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`,
-  );
-};
+import { assertNever } from "../utils";
 
 interface DiagnoseProps {
   codes?: string[];

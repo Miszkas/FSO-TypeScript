@@ -1,22 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import PatientService from "../services/patients";
-import {
-  Patient,
-  Diagnosis,
-  HealthCheckRating,
-  EntryWithoutId,
-} from "../types";
+import { Patient, Diagnosis, EntryWithoutId } from "../types";
 import EntryDetails from "./EntryDetails";
 import Togglable from "./Togglable";
 import axios from "axios";
+import NewEntryForm from "./NewEntryForm";
 
-import { TextField } from "@mui/material";
-import Alert from "@mui/material/Alert";
-
-// Turns the backend's Zod issues into "date: Invalid ISO date"
 const formatError = (data: unknown): string => {
-  // Narrow: is it { error: [...] }?
   if (
     typeof data === "object" &&
     data !== null &&
@@ -109,99 +100,3 @@ const PatientPage = ({ diagnoses }: Props) => {
 };
 
 export default PatientPage;
-
-interface NewEntryProps {
-  onSubmit: (entry: EntryWithoutId) => void;
-  error?: string;
-}
-const NewEntryForm = ({ onSubmit, error }: NewEntryProps) => {
-  const [date, setDate] = useState("");
-  const [description, setDescription] = useState("");
-  const [specialist, setSpecialist] = useState("");
-  const [healthCheckRating, setHealthCheckRating] = useState(0);
-  const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
-
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    onSubmit({
-      type: "HealthCheck",
-      date,
-      description,
-      specialist,
-      healthCheckRating: Number(healthCheckRating) as HealthCheckRating, // Number(...) as HealthCheckRating
-      diagnosisCodes,
-    });
-    setDate("");
-    setDescription("");
-    setSpecialist("");
-    setHealthCheckRating(0);
-    setDiagnosisCodes([]);
-  };
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "1em",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "12px 16px",
-        backgroundColor: "#fafafa",
-      }}
-    >
-      {error && <Alert severity="error">{error}</Alert>}
-      <h3>New Entry</h3>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "1em" }}
-      >
-        <TextField
-          id="date-input"
-          label="Date"
-          variant="standard"
-          required
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <TextField
-          id="description-input"
-          label="Description"
-          variant="standard"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-        <TextField
-          id="specialist-input"
-          label="Specialist"
-          variant="standard"
-          required
-          value={specialist}
-          onChange={(e) => setSpecialist(e.target.value)}
-        />
-        <TextField
-          id="health-check-rating-input"
-          label="Health Check Rating (0 - 3)"
-          variant="standard"
-          required
-          value={healthCheckRating}
-          onChange={(e) => setHealthCheckRating(Number(e.target.value))}
-          error={healthCheckRating < 0 || healthCheckRating > 3}
-        />
-        <TextField
-          id="diagnosis-codes-input"
-          label="Diagnosis Codes"
-          variant="standard"
-          value={diagnosisCodes.join(",")}
-          onChange={(e) =>
-            setDiagnosisCodes(
-              e.target.value.split(",").map((code) => code.trim()),
-            )
-          }
-        />
-        <button type="submit">Add Entry</button>
-      </form>
-    </div>
-  );
-};
