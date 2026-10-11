@@ -93,7 +93,11 @@ const PatientPage = ({ diagnoses }: Props) => {
       <br></br>
 
       <Togglable buttonLabel="Add New Entry">
-        <NewEntryForm onSubmit={submitNewEntry} error={error} />
+        <NewEntryForm
+          onSubmit={submitNewEntry}
+          error={error}
+          diagnoses={diagnoses}
+        />
       </Togglable>
     </div>
   );

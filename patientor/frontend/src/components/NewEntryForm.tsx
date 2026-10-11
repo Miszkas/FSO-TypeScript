@@ -1,16 +1,25 @@
 import { useState } from "react";
 import { assertNever } from "../utils";
-import { HealthCheckRating, EntryWithoutId, Entry } from "../types";
+import { HealthCheckRating, EntryWithoutId, Entry, Diagnosis } from "../types";
 
-import { TextField } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import NativeSelect from "@mui/material/NativeSelect";
+import {
+  Box,
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Alert,
+  NativeSelect,
+} from "@mui/material";
 
 interface NewEntryProps {
   onSubmit: (entry: EntryWithoutId) => void;
   error?: string;
+  diagnoses: Diagnosis[];
 }
-const NewEntryForm = ({ onSubmit, error }: NewEntryProps) => {
+const NewEntryForm = ({ onSubmit, error, diagnoses }: NewEntryProps) => {
   const [entryType, setEntryType] = useState<Entry["type"]>("HealthCheck");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
@@ -104,12 +113,13 @@ const NewEntryForm = ({ onSubmit, error }: NewEntryProps) => {
           <option value={"Hospital"}>Hospital</option>
         </NativeSelect>
         <TextField
-          id="date-input"
           label="Date"
+          type="date"
           variant="standard"
           required
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          slotProps={{ inputLabel: { shrink: true } }}
         />
         <TextField
           id="description-input"
@@ -127,17 +137,33 @@ const NewEntryForm = ({ onSubmit, error }: NewEntryProps) => {
           value={specialist}
           onChange={(e) => setSpecialist(e.target.value)}
         />
-        <TextField
-          id="diagnosis-codes-input"
-          label="Diagnosis Codes"
-          variant="standard"
-          value={diagnosisCodes.join(",")}
-          onChange={(e) =>
-            setDiagnosisCodes(
-              e.target.value.split(",").map((code) => code.trim()),
-            )
-          }
-        />
+
+        <FormControl variant="standard">
+          <InputLabel>Diagnosis codes</InputLabel>
+          <Select
+            multiple
+            value={diagnosisCodes}
+            onChange={(e) => {
+              const value = e.target.value;
+              setDiagnosisCodes(
+                typeof value === "string" ? value.split(",") : value,
+              );
+            }}
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((code) => (
+                  <Chip key={code} label={code} size="small" />
+                ))}
+              </Box>
+            )}
+          >
+            {diagnoses.map((d) => (
+              <MenuItem key={d.code} value={d.code}>
+                {d.code} {d.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         {entryType === "HealthCheck" && (
           <HealthCheckForm
             healthCheckRating={healthCheckRating}
@@ -182,14 +208,17 @@ const HealthCheckForm = ({
   return (
     <>
       <TextField
-        id="health-check-rating-input"
-        label="Health Check Rating (0 - 3)"
+        select
+        label="Health check rating"
         variant="standard"
-        required
         value={healthCheckRating}
         onChange={(e) => setHealthCheckRating(Number(e.target.value))}
-        error={healthCheckRating < 0 || healthCheckRating > 3}
-      />
+      >
+        <MenuItem value={0}>0 - Healthy</MenuItem>
+        <MenuItem value={1}>1 - Low Risk</MenuItem>
+        <MenuItem value={2}>2 - High Risk</MenuItem>
+        <MenuItem value={3}>3 - Critical Risk</MenuItem>
+      </TextField>
     </>
   );
 };
@@ -222,6 +251,8 @@ const OccupationalHealthcareForm = ({
         onChange={(e) => setEmployerName(e.target.value)}
       />
       <TextField
+        type="date"
+        slotProps={{ inputLabel: { shrink: true } }}
         id="sick-leave-start-input"
         label="Sick Leave Start Date"
         variant="standard"
@@ -229,6 +260,8 @@ const OccupationalHealthcareForm = ({
         onChange={(e) => setSickLeaveStart(e.target.value)}
       />
       <TextField
+        type="date"
+        slotProps={{ inputLabel: { shrink: true } }}
         id="sick-leave-end-input"
         label="Sick Leave End Date"
         variant="standard"
@@ -255,6 +288,8 @@ const HospitalForm = ({
   return (
     <>
       <TextField
+        type="date"
+        slotProps={{ inputLabel: { shrink: true } }}
         id="discharge-date-input"
         label="Discharge Date"
         variant="standard"
